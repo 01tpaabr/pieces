@@ -4,6 +4,8 @@
 
 import copy
 import sys
+import numpy as np
+import matplotlib.pyplot as plt
 
 print('Tamanho: ', end="")
 tamanho = int(input())
@@ -58,15 +60,13 @@ def colorePeca(tipoPeca):
 
         for j in range(len(novaPeca[0])):
             if novaPeca[i][j] != -1:
-                novaPeca[i][j] = tempNumero
+                novaPeca[i][j] += tempNumero
 
     numeroPeca += 1
 
     return novaPeca
 
 def colocaPeca(tabuleiro, peca, pos):
-    if len(peca[0]) == 2:
-        print("ValoRRRR: " + str(pos[0]))
     #Dada a posição onde o canto superior esquerdo da peça deve ficar, posiciona a peca
     #Se uma parte da peça estiver preenchida por -1, não deve mudar o valor que já está no tabuleiro
     for i in range(pos[0], (pos[0] + len(peca[0]))):
@@ -80,7 +80,7 @@ def colocaPeca(tabuleiro, peca, pos):
                     print("Valor: " + str(tabuleiro[i][j]))
                     print("Pos inicial x: " + str(pos[0]))
                     print("Pos inicial y: " + str(pos[1]))
-                    # printTabuleiro(tabuleiro)
+                    printTabuleiro(tabuleiro)
                     
                     sys.exit()
         
@@ -104,9 +104,14 @@ def criarPeca2():
     tempTabuleiro = colocaPeca(tempTabuleiro, tempList[2], [2,0])
     tempTabuleiro = colocaPeca(tempTabuleiro, rotaciona(tempList[3], 1), [0,0])
     tempTabuleiro = colocaPeca(tempTabuleiro, rotaciona(tempList[4], 3), [2,2])
+
     return tempTabuleiro
 
 def preenche(tabuleiro, n):
+    #Temos que para n = 1 e n = 2, a solução é unica
+    #Mas para n > 2, a solução é feita pela junção de peças conseguidas pela solução de n-1, rotacionadas
+    #mais uma peça no centro do tabuleiro
+    #Cada peça será representada por um número >= 0 
     tamanhoReal = 2 ** n
     global tiposPecas
     if n == 1:
@@ -121,14 +126,12 @@ def preenche(tabuleiro, n):
         return tiposPecas[n - 1]
 
     
-    novaPeca = colocaPeca(tabuleiro, preenche(criaTabuleiro(n-1), n-1), [0, (tamanhoReal//2)])
-    novaPeca = colocaPeca(tabuleiro, preenche(criaTabuleiro(n-1), n-1), [(tamanhoReal//2), 0])
+    novaPeca = colocaPeca(tabuleiro, colorePeca(preenche(criaTabuleiro(n-1), n-1)), [0, (tamanhoReal//2)])
+    novaPeca = colocaPeca(tabuleiro, colorePeca(preenche(criaTabuleiro(n-1), n-1)), [(tamanhoReal//2), 0])
+    novaPeca = colocaPeca(tabuleiro, rotaciona(colorePeca(preenche(criaTabuleiro(n-1), n-1)), 1), [0, 0])
+    novaPeca = colocaPeca(tabuleiro, rotaciona(colorePeca(preenche(criaTabuleiro(n-1), n-1)), 3), [tamanhoReal//2, tamanhoReal//2])
     
-    novaPeca = colocaPeca(tabuleiro, rotaciona(preenche(criaTabuleiro(n-1), n-1), 1), [0, 0])
-    novaPeca = colocaPeca(tabuleiro, rotaciona(preenche(criaTabuleiro(n-1), n-1), 3), [tamanhoReal//2, tamanhoReal//2])
-    printTabuleiro(novaPeca)
-    
-    novaPeca = colocaPeca(tabuleiro, preenche(tiposPecas[0], 1), [(tamanhoReal//2) - 1, (tamanhoReal//2) -1])
+    #novaPeca = colocaPeca(tabuleiro, preenche(tiposPecas[0], 1), [(tamanhoReal//2) - 1, (tamanhoReal//2) -1])
     
     
     tiposPecas[n - 1] = novaPeca
@@ -138,15 +141,14 @@ def preenche(tabuleiro, n):
 
 
 tabuleiro = criaTabuleiro(tamanho)
-printTabuleiro(tabuleiro)
-print("----------------------------------------------")
-print("Preenchido: ")
-
+# printTabuleiro(tabuleiro)
+# print("----------------------------------------------")
+# print("Preenchido: ")
 tabuleiro = preenche(tabuleiro, tamanho)
+# printTabuleiro(tabuleiro)
 
-
-#Temos que para n = 1 e n = 2, a solução é unica
-#Mas para n > 2, a solução é feita pela junção de peças conseguidas pela solução de n-1, rotacionadas
-#mais uma peça no centro do tabuleiro
-
-#Cada peça será representada por um número > 0 
+show = np.matrix(tabuleiro)
+print(show)
+plt.imshow(show)
+plt.colorbar()
+plt.show()
