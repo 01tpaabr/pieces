@@ -1,20 +1,20 @@
-#Algoritmo para mostrar configuração de uma matriz 2^n x 2^n -1, preenchida por peças do tipo:
-#[ 1 , -1 ]
-#[ 1 ,  1 ]
-
 import copy
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Algoritmo para mostrar configuração de uma matriz 2^n x 2^n -1, preenchida por peças do tipo:
+#[ 1 , -1 ]
+#[ 1 ,  1 ]
+
 print('Tamanho: ', end="")
 tamanho = int(input())
 
-#Codificação das peças:
+#Codificação das peças para adicionar cor:
 numeroPeca = 1
 
-tiposPecas = [0 for i in range(tamanho)]
 #Peça basica
+tiposPecas = [0 for i in range(tamanho)]
 tiposPecas[0] = [[0,-1],[0,0]]
 
 
@@ -60,7 +60,7 @@ def colorePeca(tipoPeca):
 
         for j in range(len(novaPeca[0])):
             if novaPeca[i][j] != -1:
-                novaPeca[i][j] += tempNumero
+                novaPeca[i][j] += tempNumero % 5
 
     numeroPeca += 1
 
@@ -131,9 +131,6 @@ def preenche(tabuleiro, n):
     novaPeca = colocaPeca(tabuleiro, rotaciona(colorePeca(preenche(criaTabuleiro(n-1), n-1)), 1), [0, 0])
     novaPeca = colocaPeca(tabuleiro, rotaciona(colorePeca(preenche(criaTabuleiro(n-1), n-1)), 3), [tamanhoReal//2, tamanhoReal//2])
     
-    #novaPeca = colocaPeca(tabuleiro, preenche(tiposPecas[0], 1), [(tamanhoReal//2) - 1, (tamanhoReal//2) -1])
-    
-    
     tiposPecas[n - 1] = novaPeca
 
     return novaPeca
@@ -141,11 +138,7 @@ def preenche(tabuleiro, n):
 
 
 tabuleiro = criaTabuleiro(tamanho)
-# printTabuleiro(tabuleiro)
-# print("----------------------------------------------")
-# print("Preenchido: ")
 tabuleiro = preenche(tabuleiro, tamanho)
-# printTabuleiro(tabuleiro)
 
 show = np.matrix(tabuleiro)
 print(show)
