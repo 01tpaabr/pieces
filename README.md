@@ -1,5 +1,7 @@
 Algoritmo para mostrar configuração de um tabuleiro 2^n x 2^n menos celula [0, 2^n -1], preenchido por peças de formato:
+
 [1, 0]
+
 [1, 1]
 
 Exemplo para n = 2:
