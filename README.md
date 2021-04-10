@@ -8,6 +8,12 @@ Exemplo para n = 2:
 
 ![ex2](https://user-images.githubusercontent.com/48078263/114060793-2041b880-986c-11eb-890a-cfd00bda5780.png)
 
+n = 3:
+
+![ex3](https://user-images.githubusercontent.com/48078263/114061747-284e2800-986d-11eb-9973-00f8b85faba1.png)
+
+
+
 Resultado para n = 13:
 
 ![out](https://user-images.githubusercontent.com/48078263/114059440-becd1a00-986a-11eb-9616-fb89345a9465.png)
