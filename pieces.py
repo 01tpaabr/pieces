@@ -114,6 +114,7 @@ def preenche(tabuleiro, n):
     #Cada peça será representada por um número >= 0 
     tamanhoReal = 2 ** n
     global tiposPecas
+
     if n == 1:
         novaPeca = colorePeca(tiposPecas[0])
         return colocaPeca(tabuleiro, novaPeca, [0,0])
@@ -125,13 +126,17 @@ def preenche(tabuleiro, n):
     elif tiposPecas[n - 1] != 0:
         return tiposPecas[n - 1]
 
-    
+
     novaPeca = colocaPeca(tabuleiro, colorePeca(preenche(criaTabuleiro(n-1), n-1)), [0, (tamanhoReal//2)])
     novaPeca = colocaPeca(tabuleiro, colorePeca(preenche(criaTabuleiro(n-1), n-1)), [(tamanhoReal//2), 0])
     novaPeca = colocaPeca(tabuleiro, rotaciona(colorePeca(preenche(criaTabuleiro(n-1), n-1)), 1), [0, 0])
     novaPeca = colocaPeca(tabuleiro, rotaciona(colorePeca(preenche(criaTabuleiro(n-1), n-1)), 3), [tamanhoReal//2, tamanhoReal//2])
     
     tiposPecas[n - 1] = novaPeca
+
+    #Remover peças que já não são necessárias
+    tiposPecas[n - 2] = 0
+
 
     return novaPeca
     
@@ -141,7 +146,6 @@ tabuleiro = criaTabuleiro(tamanho)
 tabuleiro = preenche(tabuleiro, tamanho)
 
 show = np.matrix(tabuleiro)
-print(show)
 plt.imshow(show)
 plt.colorbar()
 plt.show()
